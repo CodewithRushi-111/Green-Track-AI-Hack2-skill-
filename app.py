@@ -16,10 +16,11 @@ def create_app(config_class=None):
     
     # Load configuration
     if config_class is None:
-        if os.environ.get('FLASK_ENV') == 'production':
+        if os.environ.get('FLASK_ENV') == 'production' or os.environ.get('VERCEL') == '1':
             config_class = ProductionConfig
         else:
             config_class = DevelopmentConfig
+
             
     app.config.from_object(config_class)
     
