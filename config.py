@@ -20,4 +20,12 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')  # To be set in production, e.g. PostgreSQL
+    
+    # Safely retrieve DATABASE_URL, normalise postgres:// prefix to postgresql:// for SQLAlchemy,
+    # and default to a writable SQLite database in Vercel's /tmp directory if no URL is provided.
+    db_url = os.environ.get('DATABASE_URL')
+    if db_url and db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
+    
+    SQLALCHEMY_DATABASE_URI = db_url or 'sqlite:////tmp/greentrack_prod.db'
+
