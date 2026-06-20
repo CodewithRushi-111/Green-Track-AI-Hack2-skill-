@@ -2,12 +2,40 @@
 
 > Nature-inspired carbon footprint tracking, gamified offsetting, and intelligent climate recommendations. Made for the **Hack2Skill — Carbon Footprint Track** competition.
 
+This repository is organized as a user-friendly, production-ready monorepo with separate frontend and backend directories.
+
+---
+
+## 📁 Repository Structure
+
+```tree
+.
+├── backend/               # Flask Python REST API & Tests
+│   ├── routes/            # Blueprint API endpoints (auth, tracker, etc.)
+│   ├── services/          # Business logic layers (Gemini, Claude, Rate Limiter)
+│   ├── tests/             # Pytest automated integration test suite
+│   ├── app.py             # Flask Entry point & lazy database initializer
+│   ├── config.py          # Production & Development database configs
+│   ├── database.py        # SQLAlchemy models (User, Challenge, Transactions)
+│   ├── commands.py        # CLI database backups utilities
+│   └── requirements.txt   # Backend python packages
+│
+├── frontend/              # Single Page Application (SPA) HTML, CSS, JS
+│   ├── css/               # Modular HSL styling sheets
+│   ├── js/                # Client state, routing, and component engines
+│   └── index.html         # Main app viewport
+│
+├── .env.example           # Shared environment variable template
+├── vercel.json            # Vercel CDN/routing build specs
+└── README.md              # Project documentation
+```
+
 ---
 
 ## 🚀 Key Features
 
 ### 1. 🤖 AI-Powered Carbon Advisor
-* **Personalized Context Injection**: Unlike generic tip generators, our backend queries your lifetime emissions data and injects it directly into the AI's instruction set for bespoke coaching.
+* **Personalized Context Injection**: Queries your lifetime emissions data and injects it directly into the AI's instruction set for bespoke coaching.
 * **Resilient Multi-LLM Cascading**: Integrates **Anthropic Claude 3.5 Sonnet** as the primary engine. If offline or if API keys are missing, it falls back to **Google Gemini 1.5 Flash**, and finally to a rule-based **Offline Advisor**—ensuring it *never* breaks.
 * **Server-Sent Events (SSE)**: Streams responses token-by-token directly to a premium floating chat widget.
 
@@ -31,12 +59,12 @@
 
 * **Backend**: Python & Flask (modular Blueprint structure, SQLite DB, SQLAlchemy ORM, rate-limiter, JWT tokens).
 * **Frontend**: Vanilla HTML5 landmarks, CSS3 HSL design tokens, Single Page Application (SPA) routing, SVG charts.
-* **AI Orchestration**: Anthropic API (`anthropic`), Google GenAI (`google-generativeai`), Server-Sent Events (SSE).
+* **AI Orchestration**: Anthropic API, Google GenAI (`google-generativeai`), Server-Sent Events (SSE).
 * **Testing**: `pytest` integration testing.
 
 ---
 
-## 📦 Quick Start
+## 📦 Local Quick Start
 
 ### 1. Prerequisites
 Make sure you have Python 3.10+ installed.
@@ -48,28 +76,44 @@ git clone https://github.com/CodewithRushi-111/Green-Track-AI-Hack2-skill-.git
 cd Green-Track-AI-Hack2-skill-
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 ```
 
 ### 3. Environment Setup
-Create a `.env` file or export your API credentials:
-```env
-ANTHROPIC_API_KEY=your_claude_api_key_here
-GEMINI_API_KEY=your_gemini_api_key_here
+Configure your environment variables:
+```bash
+cp .env.example .env
 ```
+Fill in your API credentials inside the `.env` file:
+* `GEMINI_API_KEY`: Google Generative AI key
+* `ANTHROPIC_API_KEY`: Claude API key (optional)
 
 ### 4. Run the Application
-Start the Flask development server:
+Start the Flask development server from the backend folder:
 ```bash
-python app.py
+python backend/app.py
 ```
 Open your browser and navigate to `http://127.0.0.1:5000/`.
 
 ### 5. Running Tests
-Run the 16 integration tests:
+Run the integration test suite:
 ```bash
-python -m pytest tests/test_suite.py
+python -m pytest backend/tests/test_suite.py
 ```
+
+---
+
+## ☁️ Vercel Deployment
+
+Deploying this monorepo structure to Vercel is fully automated via the root `vercel.json` file. 
+
+1. **Static Frontend**: Served instantly using Vercel's high-speed global CDN (mapping `frontend/` directory).
+2. **Serverless API**: Handled in the cloud by the `@vercel/python` builder (running `backend/app.py`).
+
+**Vercel Environment Variables to Set:**
+* `GEMINI_API_KEY` (highly recommended to unlock the AI coach)
+* `FLASK_ENV` = `production`
+* `DATABASE_URL` (optional; if omitted, the backend will auto-provision a SQLite database in Vercel's writable `/tmp` folder)
 
 ---
 

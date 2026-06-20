@@ -2,30 +2,30 @@
   "version": 2,
   "builds": [
     {
-      "src": "app.py",
+      "src": "backend/app.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "app.py"
+      "dest": "backend/app.py"
     },
     {
       "src": "/css/(.*)",
-      "dest": "/static/css/$1"
+      "dest": "/frontend/css/$1"
     },
     {
       "src": "/js/(.*)",
-      "dest": "/static/js/$1"
+      "dest": "/frontend/js/$1"
     },
     {
       "src": "/favicon.ico",
-      "dest": "/static/favicon.ico"
+      "dest": "/frontend/favicon.ico"
     },
     {
       "src": "/((?!api|css|js).*)",
-      "dest": "/static/index.html"
+      "dest": "/frontend/index.html"
     }
   ]
 }

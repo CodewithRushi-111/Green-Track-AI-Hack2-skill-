@@ -16,7 +16,7 @@ db_lock = Lock()
 
 
 def create_app(config_class=None):
-    app = Flask(__name__, static_folder='static', static_url_path='')
+    app = Flask(__name__, static_folder='../frontend', static_url_path='')
     
     # Load configuration
     if config_class is None:
