@@ -1,4 +1,8 @@
 import os
+import sys
+# Ensure Python can resolve modules inside the backend directory on Vercel
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from threading import Lock
 from flask import Flask, send_from_directory, jsonify, request
 from flask_migrate import Migrate
